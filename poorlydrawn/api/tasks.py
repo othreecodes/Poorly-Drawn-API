@@ -16,10 +16,13 @@ def fetch_and_insert_in_db(x):
     if x is None :
         return None
     soup = BeautifulSoup(x.text, "html.parser")
-
-    title = soup.select_one('head > title').text.replace("Poorly Drawn Lines – ", "")
-    image = soup.select_one('.post > p > img').attrs['src']
-    description = soup.select_one('.post > p > img').attrs['alt']
+    try:
+        title = soup.select_one('head > title').text.replace("Poorly Drawn Lines – ", "")
+        image = soup.select_one('.post > p > img').attrs['src']
+        description = soup.select_one('.post > p > img').attrs['alt']
+    except AttributeError as e:
+        print(e)
+        title = soup.select_one('.post > p > img').attrs['alt']
 
     if not models.Comic.objects.filter(title=title).exists():
         comic = models.Comic()

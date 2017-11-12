@@ -13,6 +13,8 @@ from . import models
 
 @shared_task()
 def fetch_and_insert_in_db(x):
+    if x is None :
+        return None
     soup = BeautifulSoup(x.text, "html.parser")
 
     title = soup.select_one('head > title').text.replace("Poorly Drawn Lines – ", "")

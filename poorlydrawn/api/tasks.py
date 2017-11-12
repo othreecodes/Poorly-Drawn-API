@@ -2,13 +2,22 @@
 from celery import shared_task
 from django.conf import settings
 import requests
-import  grequests
-
-
+import grequests
+import celery
+import datetime
+from celery.task.base import periodic_task
+import datetime
 from bs4 import BeautifulSoup
 
-@shared_task(name="fetch_comics")
-def fetch_comics(x):
+# @periodic_task(run_every=datetime.timedelta(seconds=30))
+# def myfunc():
+#     print('periodic_task')
+#     return True
+
+
+@periodic_task(run_every=datetime.timedelta(hours=5))
+def fetch_comics():
+    print("fething ...............")
     response = requests.get(settings.ARCHIVE_URL)
 
     soup = BeautifulSoup(response.text, "html.parser")
@@ -20,10 +29,4 @@ def fetch_comics(x):
     def insert(x):
         soup = BeautifulSoup(requests.get(x))
 
-
     h = [insert(x) for x in to_fetch]
-
-
-
-
-

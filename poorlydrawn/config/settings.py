@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import environ
 import dj_database_url
+import djcelery
+djcelery.setup_loader()
 
 env = environ.Env()
 ROOT_DIR = environ.Path(__file__) - 3
@@ -56,6 +58,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'poorlydrawn.config.urls'
+
+
+INSTALLED_APPS += ("djcelery", )
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 TEMPLATES = [
     {
@@ -121,6 +127,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -148,3 +156,15 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Lagos'
+
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+
+from celery.schedules import crontab
+from datetime import timedelta
+CELERY_IMPORTS = ('poorlydrawn.api.tasks', )
+CELERYBEAT_SCHEDULE = {
+    'context': {
+        'task': 'poorlydrawn.api.tasks.fetch_comics',
+        'schedule': timedelta(hours=5),
+    }
+}

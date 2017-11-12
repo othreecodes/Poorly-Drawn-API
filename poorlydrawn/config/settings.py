@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     'poorlydrawn.api',
 ]
 
+if DEBUG:
+    INSTALLED_APPS += ("django_extensions",)
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',

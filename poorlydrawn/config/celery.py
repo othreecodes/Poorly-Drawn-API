@@ -5,7 +5,7 @@ from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'poorlydrawn.config.settings')
-app = Celery('poorlydrawn')
+app = Celery('poorlydrawnlines')
 
 app.conf.update(
       CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend',

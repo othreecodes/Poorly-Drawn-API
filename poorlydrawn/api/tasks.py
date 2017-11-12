@@ -8,11 +8,28 @@ import datetime
 from celery.task.base import periodic_task
 import datetime
 from bs4 import BeautifulSoup
+from . import models
 
-# @periodic_task(run_every=datetime.timedelta(seconds=30))
-# def myfunc():
-#     print('periodic_task')
-#     return True
+
+@shared_task()
+def fetch_and_insert_in_db(x):
+    soup = BeautifulSoup(requests.get(x).text, "html.parser")
+
+    title = soup.select_one('head > title').text.replace("Poorly Drawn Lines – ", "")
+    image = soup.select_one('.post > p > img').attrs['src']
+    description = soup.select_one('.post > p > img').attrs['alt']
+
+    if not models.Comic.objects.filter(title="ddd").exists():
+        comic = models.Comic()
+        comic.description = description
+        comic.title = title
+        comic.image = image
+        comic.link = x.url
+        comic.save()
+
+        return comic
+    else:
+        models.Comic.objects.filter(title="ddd").first()
 
 
 @periodic_task(run_every=datetime.timedelta(hours=5))
@@ -24,9 +41,10 @@ def fetch_comics():
 
     all_comics = soup.select('.content > ul > li > a')
 
-    to_fetch = (grequests.get(x.attrs['href']) for x in all_comics)
-
-    def insert(x):
-        soup = BeautifulSoup(requests.get(x))
-
-    h = [insert(x) for x in to_fetch]
+    to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
+    print("fetched now saving....")
+    for x in to_fetch:
+        try:
+            fetch_and_insert_in_db.delay(x)
+        except Exception as e:  # TODO: Catch actual exception
+            pass

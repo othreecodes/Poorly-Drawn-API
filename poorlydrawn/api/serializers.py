@@ -5,4 +5,5 @@ class ComicSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.Comic
-        fields = ['created','title','link','description','image']
+        fields = ['id','created','title','link','description','image','slug']
+        ordering = "created"

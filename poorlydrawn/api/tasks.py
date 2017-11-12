@@ -25,11 +25,11 @@ def fetch_and_insert_in_db(x):
         comic.title = title
         comic.image = image
         comic.link = x.url
-        comic.save()
 
         return comic
     else:
-        models.Comic.objects.filter(title=title).first()
+
+        return None
 
 
 @periodic_task(run_every=datetime.timedelta(hours=5))
@@ -44,9 +44,6 @@ def fetch_comics():
     to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics[:5]))
     print("fetched now saving....")
 
-    for x in to_fetch:
-        try:
-            fetch_and_insert_in_db.delay(x)
-
-        except Exception as e:  # TODO: Catch actual exception
-            print(e)
+    comiccs = [fetch_and_insert_in_db(x) for x in to_fetch]
+    comicsave = [x for x in comiccs if x is not None]
+    models.Comic.objects.bulk_create(comicsave)

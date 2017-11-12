@@ -29,7 +29,7 @@ SECRET_KEY = '0zy+$_4ghh=nwxnddf2f3y*et7=j2&m4nc$8de)&grw4dllu2$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG",True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition

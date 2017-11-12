@@ -46,8 +46,6 @@ def fetch_comics():
 
     for x in to_fetch:
         try:
-            import pdb;
-            pdb.set_trace()
             fetch_and_insert_in_db.delay(x)
 
         except Exception as e:  # TODO: Catch actual exception

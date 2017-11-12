@@ -12,3 +12,6 @@ class Comic(TimeStampedModel):
     image = models.CharField(max_length=1000, null=True, blank=True)
     slug = AutoSlugField(populate_from='title')
 
+    def __str__(self):
+        return self.slug
+   

@@ -6,11 +6,12 @@ bs4==0.0.1
 celery==4.1.0
 certifi==2017.11.5
 chardet==3.0.4
+dj-database-url==0.4.2
 Django==1.11.7
+django-environ==0.4.1
 django-extensions==1.9.7
 django-model-utils==3.0.0
 djangorestframework==3.7.3
-environ==1.0
 gevent==1.2.2
 greenlet==0.4.12
 grequests==0.3.0

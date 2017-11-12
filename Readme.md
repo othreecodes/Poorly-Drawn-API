@@ -76,3 +76,11 @@ GET - https://poorlydrawnlines.herokuapp.com/api/v1/comics/?limit=5&offset=200
     ]
 }
 ```
+
+# Also
+A celery Periodic Task runs every 5 hours to check for new content. Which should be longer given that comics come out every
+Wednesday and Friday.....
+
+# TODO
+- [ ] App that consumes endpoint to show sample usage
+- [ ] Code clean up

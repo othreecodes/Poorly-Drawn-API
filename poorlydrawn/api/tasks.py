@@ -13,13 +13,13 @@ from . import models
 
 @shared_task()
 def fetch_and_insert_in_db(x):
-    soup = BeautifulSoup(requests.get(x).text, "html.parser")
+    soup = BeautifulSoup(x.text, "html.parser")
 
     title = soup.select_one('head > title').text.replace("Poorly Drawn Lines – ", "")
     image = soup.select_one('.post > p > img').attrs['src']
     description = soup.select_one('.post > p > img').attrs['alt']
 
-    if not models.Comic.objects.filter(title="ddd").exists():
+    if not models.Comic.objects.filter(title=title).exists():
         comic = models.Comic()
         comic.description = description
         comic.title = title
@@ -29,7 +29,7 @@ def fetch_and_insert_in_db(x):
 
         return comic
     else:
-        models.Comic.objects.filter(title="ddd").first()
+        models.Comic.objects.filter(title=title).first()
 
 
 @periodic_task(run_every=datetime.timedelta(hours=5))
@@ -41,10 +41,14 @@ def fetch_comics():
 
     all_comics = soup.select('.content > ul > li > a')
 
-    to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
+    to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics[:5]))
     print("fetched now saving....")
+
     for x in to_fetch:
         try:
+            import pdb;
+            pdb.set_trace()
             fetch_and_insert_in_db.delay(x)
+
         except Exception as e:  # TODO: Catch actual exception
-            pass
+            print(e)

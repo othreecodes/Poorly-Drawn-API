@@ -49,14 +49,38 @@ def fetch_comics():
 
     # to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
     # TODO: 502/503 while running asyncronoously use syncronous requets?
-    to_fetch = [requests.get(x.attrs['href']) for x in all_comics]
+
     print("fetched now saving....")
 
-    comiccs = [fetch_and_insert_in_db(x) for x in to_fetch]
-    comicsave = [x for x in comiccs if x is not None]
-    print(len(comicsave))
+    for index, x in enumerate(all_comics):
+        res = requests.get(x.attrs['href'])
+        comic = fetch_and_insert_in_db(res)
 
-    models.Comic.objects.bulk_create(comicsave)
+        if comic:
+            comic.save()
+
+        print(index)
+
+
+# @periodic_task(run_every=datetime.timedelta(hours=5))
+# def fetch_comics():
+#     print("fething ...............")
+#     response = requests.get(settings.ARCHIVE_URL)
+#
+#     soup = BeautifulSoup(response.text, "html.parser")
+#
+#     all_comics = soup.select('.content > ul > li > a')
+#
+#     # to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
+#     # TODO: 502/503 while running asyncronoously use syncronous requets?
+#     to_fetch = [requests.get(x.attrs['href']) for x in all_comics]
+#     print("fetched now saving....")
+#
+#     comiccs = [fetch_and_insert_in_db(x) for x in to_fetch]
+#     comicsave = [x for x in comiccs if x is not None]
+#     print(len(comicsave))
+#
+#     models.Comic.objects.bulk_create(comicsave)
 
 
 def f():

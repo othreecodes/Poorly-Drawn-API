@@ -54,4 +54,5 @@ def fetch_comics():
 
     comiccs = [fetch_and_insert_in_db(x) for x in to_fetch]
     comicsave = [x for x in comiccs if x is not None]
+    print(len(comicsave))
     models.Comic.objects.bulk_create(comicsave)

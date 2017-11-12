@@ -57,3 +57,26 @@ def fetch_comics():
     print(len(comicsave))
 
     models.Comic.objects.bulk_create(comicsave)
+
+
+def f():
+    print("fething ...............")
+    response = requests.get(settings.ARCHIVE_URL)
+
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    all_comics = soup.select('.content > ul > li > a')
+
+    # to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
+    # TODO: 502/503 while running asyncronoously use syncronous requets?
+
+    print("fetched now saving....")
+
+    for index, x in enumerate(all_comics):
+        res = requests.get(x.attrs['href'])
+        comic = fetch_and_insert_in_db(res)
+
+        if comic:
+            comic.save()
+
+        print(index)

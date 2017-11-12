@@ -13,7 +13,7 @@ from . import models
 
 @shared_task()
 def fetch_and_insert_in_db(x):
-    if x is None :
+    if x is None:
         return None
     soup = BeautifulSoup(x.text, "html.parser")
     try:
@@ -22,7 +22,6 @@ def fetch_and_insert_in_db(x):
         description = soup.select_one('.post > p > img').attrs['alt']
     except AttributeError as e:
         print(x)
-
 
         return None
 
@@ -48,7 +47,9 @@ def fetch_comics():
 
     all_comics = soup.select('.content > ul > li > a')
 
-    to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
+    # to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
+    # TODO: 502/503 while running asyncronoously use syncronous requets?
+    to_fetch = [requests.get(x.attrs['href']) for x in all_comics]
     print("fetched now saving....")
 
     comiccs = [fetch_and_insert_in_db(x) for x in to_fetch]

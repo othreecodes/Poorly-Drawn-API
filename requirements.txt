@@ -8,6 +8,7 @@ Django==1.11.7
 django-extensions==1.9.7
 django-model-utils==3.0.0
 djangorestframework==3.7.3
+environ==1.0
 gunicorn==19.7.1
 isort==4.2.15
 kombu==4.1.0

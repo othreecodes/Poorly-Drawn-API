@@ -14,8 +14,9 @@ from rest_framework.pagination import PageNumberPagination
 class ComicViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ComicSerializer
     queryset = models.Comic.objects.all()
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     http_method_names = ['get']
+
     # lookup_field = 'slug' #TODO: is slug a better thing to use?
 
     def get_view_description(self, html=False):

@@ -41,7 +41,7 @@ def fetch_comics():
 
     all_comics = soup.select('.content > ul > li > a')
 
-    to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics[:5]))
+    to_fetch = grequests.map((grequests.get(x.attrs['href']) for x in all_comics))
     print("fetched now saving....")
 
     comiccs = [fetch_and_insert_in_db(x) for x in to_fetch]

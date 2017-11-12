@@ -21,8 +21,10 @@ def fetch_and_insert_in_db(x):
         image = soup.select_one('.post > p > img').attrs['src']
         description = soup.select_one('.post > p > img').attrs['alt']
     except AttributeError as e:
-        print(e)
-        title = soup.select_one('.post > p > img').attrs['alt']
+        print(x)
+
+
+        return None
 
     if not models.Comic.objects.filter(title=title).exists():
         comic = models.Comic()

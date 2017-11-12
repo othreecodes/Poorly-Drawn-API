@@ -15,7 +15,7 @@ import environ
 import dj_database_url
 
 env = environ.Env()
-ROOT_DIR = environ.Path(__file__) -3
+ROOT_DIR = environ.Path(__file__) - 3
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = str(ROOT_DIR)
@@ -27,10 +27,9 @@ BASE_DIR = str(ROOT_DIR)
 SECRET_KEY = '0zy+$_4ghh=nwxnddf2f3y*et7=j2&m4nc$8de)&grw4dllu2$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG",True)
+DEBUG = env.bool("DEBUG", True)
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -76,10 +75,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'poorlydrawn.config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-DATABASES= {}
+DATABASES = {}
 if DEBUG:
     DATABASES = {
         'default': {
@@ -89,7 +87,6 @@ if DEBUG:
     }
 else:
     DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-
 
 ARCHIVE_URL = "http://www.poorlydrawnlines.com/archive/"
 
@@ -111,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -124,7 +120,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -146,10 +141,9 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-
 # CELERY STUFF
-BROKER_URL = os.environ.get("REDIS_URL",'redis://localhost:6379')
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL",'redis://localhost:6379')
+BROKER_URL = os.environ.get("REDIS_URL", 'redis://localhost:6379')
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL", 'redis://localhost:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

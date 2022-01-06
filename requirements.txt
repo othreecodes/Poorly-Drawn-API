@@ -4,7 +4,7 @@ astroid==1.5.3
 beautifulsoup4==4.6.0
 billiard==3.3.0.23
 bs4==0.0.1
-celery==3.1.25
+celery==5.2.2
 certifi==2017.11.5
 chardet==3.0.4
 dj-database-url==0.4.2
